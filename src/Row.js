@@ -18,7 +18,7 @@ export default function Row({ title, fetchUrl }) {
     async function fetchData() {
       //wait for a response,
       const request = await axios.get(fetchUrl);
-      // console.log(request)
+
       setMovies(request.data.results); //
 
       return request;
@@ -26,7 +26,6 @@ export default function Row({ title, fetchUrl }) {
     fetchData();
     // dependency for useEffect that is outside of function
   }, [fetchUrl]);
-  console.log(movies);
   return (
     <div className="row">
       <h2>{title}</h2>

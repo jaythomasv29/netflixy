@@ -14,12 +14,14 @@ function Banner() {
       const randomPosition = Math.floor(
         Math.random() * request.data.results.length
       );
-      const randomMovie = request.data.results[randomPosition];
+      setMovie(request.data.results[randomPosition]); // random movie set as state
 
-      console.log(randomMovie.name);
+      return request;
     }
     fetchData();
   }, []);
+
+  console.log(movie);
 
   return (
     <header>
