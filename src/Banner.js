@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import axios from "./axios"; //import axios helper file
 import requests from "./requests";
-import "./banner.css";
+import "./Banner.css";
 
 function Banner() {
   // useState hook to use state in functional component
