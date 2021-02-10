@@ -50,8 +50,11 @@ export default function Row({ title, fetchUrl }) {
       movieTrailer(movie?.title || "404")
         // .then chain promise
         .then((url) => {
+          // wrap in URL Search Param to get the querystring
+          // https://www.youtube.com/watch?v=4XP6T1CMgBQ ** everything after ? **
           const urlParams = new URLSearchParams(new URL(url).search);
-          setTrailerUrl(urlParams.get("v"));
+          // If the URL of your page is https://example.com/?name=Jonathan&age=18 you could parse out the 'name' and 'age' parameters
+          setTrailerUrl(urlParams.get("v")); // get value of querystring param variable v=value
         })
         // catch error
         .catch((error) => console.log(error));
