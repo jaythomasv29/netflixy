@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import YouTube from "react-youtube";
 import axios from "./axios"; //import axios helper file
 import "./Row.css";
+import movieTrailer from "movie-trailer";
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -8,7 +10,8 @@ export default function Row({ title, fetchUrl }) {
   // state to store movie data
   // Declare a new state variable, which we'll call "movies"
 
-  const [movies, setMovies] = useState([]); // * useState  HOOK to store
+  const [movies, setMovies] = useState([]); // * useState  Hook to store
+  const [trailerUrl, setTrailerUrl] = useState(""); // * useState Hook to store trailerUrl
 
   // A snippet of code which runs based on a specific condition/variable
   // *useEffect HOOK (similar to componentDidMount and componenetDidUpdate)
@@ -26,6 +29,35 @@ export default function Row({ title, fetchUrl }) {
     fetchData();
     // dependency for useEffect that is outside of function
   }, [fetchUrl]);
+
+  const opts = {
+    height: "390",
+    width: "100%",
+    playerVars: {
+      //
+      autoplay: 1,
+    },
+  };
+
+  // click event for when img tag is clicked
+  const handleClick = (movie) => {
+    // if video is open
+    if (trailerUrl) {
+      // set trailerUrl to empty if a trailerUrl already exists
+      setTrailerUrl("");
+    } else {
+      // handle showing of setTrailer
+      movieTrailer(movie?.title || "404")
+        // .then chain promise
+        .then((url) => {
+          const urlParams = new URLSearchParams(new URL(url).search);
+          setTrailerUrl(urlParams.get("v"));
+        })
+        // catch error
+        .catch((error) => console.log(error));
+    }
+  };
+
   return (
     <div className="row">
       <h2>{title}</h2>
@@ -33,16 +65,15 @@ export default function Row({ title, fetchUrl }) {
         {movies.map((movie) => (
           <img
             key={movie.id}
+            onClick={() => handleClick(movie)}
             className="row__poster"
             src={`${base_url}${movie.poster_path}`}
             alt={movie.name}
           />
         ))}
       </div>
-
-      {/** container => posters 
-        container with posters inside
-      */}
+      {/* conditional render to show youtube video if it exists */}
+      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </div>
   );
 }
